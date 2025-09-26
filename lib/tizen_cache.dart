@@ -20,10 +20,10 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 import 'package:process/process.dart';
 
-const String kTizenEngineStampName = 'tizen-engine';
-const String kTizenEngineRepoName = 'flutter-tizen/flutter';
-const String kTizenEmbedderStampName = 'tizen-embedder';
-const String kTizenEmbedderRepoName = 'flutter-tizen/embedder';
+const kTizenEngineStampName = 'tizen-engine';
+const kTizenEngineRepoName = 'flutter-tizen/flutter';
+const kTizenEmbedderStampName = 'tizen-embedder';
+const kTizenEmbedderRepoName = 'flutter-tizen/embedder';
 
 mixin TizenRequiredArtifacts on FlutterCommand {
   @override
@@ -113,7 +113,7 @@ abstract class TizenCachedArtifacts extends EngineCachedArtifact {
   final OperatingSystemUtils _osUtils;
   final ProcessUtils _processUtils;
 
-  static const String kGithubBaseUrl = 'https://github.com';
+  static const kGithubBaseUrl = 'https://github.com';
 
   /// A replacement for [Cache._artifactUpdater] to work with
   /// https://github.com/flutter/flutter/pull/94178.
@@ -155,7 +155,7 @@ abstract class TizenCachedArtifacts extends EngineCachedArtifact {
     FileSystem fileSystem,
     OperatingSystemUtils operatingSystemUtils,
   ) async {
-    final String downloadUrl = '$kGithubBaseUrl/$_repoName/releases/download/$shortVersion';
+    final downloadUrl = '$kGithubBaseUrl/$_repoName/releases/download/$shortVersion';
 
     for (final List<String> toolsDir in getBinaryDirs()) {
       final String cacheDir = toolsDir[0];
@@ -283,6 +283,9 @@ class TizenEngineArtifacts extends TizenCachedArtifacts {
       <String>['tizen-arm64-profile', 'tizen-arm64-profile.zip'],
       <String>['tizen-arm64-release', 'tizen-arm64-release.zip'],
       <String>['tizen-x86-debug', 'tizen-x86-debug.zip'],
+      <String>['tizen-x64-debug', 'tizen-x64-debug.zip'],
+      <String>['tizen-x64-profile', 'tizen-x64-profile.zip'],
+      <String>['tizen-x64-release', 'tizen-x64-release.zip'],
       if (_platform.isWindows)
         ..._binaryDirsForHostPlatform('windows-x64')
       else if (_platform.isMacOS)
@@ -298,6 +301,10 @@ class TizenEngineArtifacts extends TizenCachedArtifacts {
       <String>['tizen-arm-release/$platform', 'tizen-arm-release_$platform.zip'],
       <String>['tizen-arm64-profile/$platform', 'tizen-arm64-profile_$platform.zip'],
       <String>['tizen-arm64-release/$platform', 'tizen-arm64-release_$platform.zip'],
+      if (platform == 'linux-x64')
+        <String>['tizen-x64-profile/$platform', 'tizen-x64-profile_$platform.zip'],
+      if (platform == 'linux-x64')
+        <String>['tizen-x64-release/$platform', 'tizen-x64-release_$platform.zip'],
     ];
   }
 }
@@ -355,6 +362,7 @@ class TizenEmbedderArtifacts extends TizenCachedArtifacts {
       <String>['tizen-arm64/6.5', 'tizen-6.5-arm64.zip'],
       <String>['tizen-x86/6.0', 'tizen-6.0-x86.zip'],
       <String>['tizen-x86/6.5', 'tizen-6.5-x86.zip'],
+      <String>['tizen-x64/8.0', 'tizen-8.0-x64.zip'],
     ];
   }
 }

@@ -14,7 +14,7 @@ extension PathUtils on String {
   /// On Windows, converts Windows-style path (e.g. 'C:\x\y') into POSIX path
   /// ('/c/x/y') and encloses with [encloseWith].
   String toPosixPath([String encloseWith = '"']) {
-    String path = this;
+    var path = this;
     if (globals.platform.isWindows) {
       path = path.replaceAll(r'\', '/');
       if (path.startsWith(':', 1)) {
@@ -30,14 +30,23 @@ String getBuildConfig(BuildMode buildMode) {
 }
 
 Directory getEngineArtifactsDirectory(String arch, BuildMode mode) {
+  if (arch == 'x86_64') {
+    arch = 'x64';
+  }
   return globals.artifacts!.usesLocalArtifacts
       ? globals.fs.directory(globals.artifacts!.localEngineInfo!.targetOutPath)
       : globals.cache.getArtifactDirectory('engine').childDirectory('tizen-$arch-${mode.name}');
 }
 
 Directory getEmbedderArtifactsDirectory(String? apiVersion, String arch) {
-  final Version? version = Version.parse(apiVersion);
-  if (version != null && version >= Version(6, 5, 0)) {
+  final Version version = Version.parse(apiVersion) ?? Version(6, 0, 0);
+  if (arch == 'x86_64') {
+    arch = 'x64';
+  }
+
+  if (arch == 'x64' && version >= Version(8, 0, 0)) {
+    apiVersion = '8.0';
+  } else if (version >= Version(6, 5, 0)) {
     apiVersion = '6.5';
   } else {
     apiVersion = '6.0';

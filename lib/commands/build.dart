@@ -40,7 +40,7 @@ class BuildTpkCommand extends BuildSubCommand with DartPluginRegistry, TizenRequ
     argParser.addOption(
       'target-arch',
       defaultsTo: 'arm',
-      allowed: <String>['arm', 'arm64', 'x86'],
+      allowed: <String>['arm', 'arm64', 'x86', 'x64'],
       help: 'The target architecture for which the the app is compiled.',
     );
     argParser.addOption(
@@ -60,21 +60,22 @@ class BuildTpkCommand extends BuildSubCommand with DartPluginRegistry, TizenRequ
   }
 
   @override
-  final String name = 'tpk';
+  final name = 'tpk';
 
   @override
-  final String description = 'Build a Tizen TPK file from your app.';
+  final description = 'Build a Tizen TPK file from your app.';
 
   /// See: [BuildApkCommand.runCommand] in `build_apk.dart`
   @override
   Future<FlutterCommandResult> runCommand() async {
     final BuildInfo buildInfo = await getBuildInfo();
-    final TizenBuildInfo tizenBuildInfo = TizenBuildInfo(
+    final tizenBuildInfo = TizenBuildInfo(
       buildInfo,
       targetArch: stringArg('target-arch')!,
       deviceProfile: stringArg('device-profile')!,
       securityProfile: stringArg('security-profile'),
     );
+
     _validateBuild(tizenBuildInfo);
 
     await tizenBuilder?.buildTpk(
@@ -104,7 +105,7 @@ class BuildModuleCommand extends BuildSubCommand with DartPluginRegistry, TizenR
     argParser.addOption(
       'target-arch',
       defaultsTo: 'arm',
-      allowed: <String>['arm', 'arm64', 'x86'],
+      allowed: <String>['arm', 'arm64', 'x86', 'x64'],
       help: 'The target architecture for which the the app is compiled.',
     );
     argParser.addOption(
@@ -122,15 +123,15 @@ class BuildModuleCommand extends BuildSubCommand with DartPluginRegistry, TizenR
   }
 
   @override
-  final String name = 'module';
+  final name = 'module';
 
   @override
-  final String description = 'Build a module that can be embedded in your existing Tizen app.';
+  final description = 'Build a module that can be embedded in your existing Tizen app.';
 
   @override
   Future<FlutterCommandResult> runCommand() async {
     final BuildInfo buildInfo = await getBuildInfo();
-    final TizenBuildInfo tizenBuildInfo = TizenBuildInfo(
+    final tizenBuildInfo = TizenBuildInfo(
       buildInfo,
       targetArch: stringArg('target-arch')!,
       deviceProfile: stringArg('device-profile')!,
